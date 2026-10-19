@@ -27,6 +27,9 @@ Ignore missing battery errors
 .B \-e
 Cause notifications to expire
 .TP
+.B \-s
+Play built-in notification sound
+.TP
 .B \-N
 Disable desktop notifications
 .TP
