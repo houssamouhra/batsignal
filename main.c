@@ -28,6 +28,8 @@
 #include "notify.h"
 #include "options.h"
 
+bool enable_sound = false;
+
 void print_version()
 {
   printf("%s %s\n", PROGNAME, VERSION);
@@ -46,6 +48,7 @@ Options:\n\
     -o             check battery once and exit\n\
     -i             ignore missing battery errors\n\
     -e             cause notifications to expire\n\
+    -s             play built-in sound with notifications\n\
     -N             disable desktop notifications\n\
     -w LEVEL       battery warning LEVEL\n\
                    (default: 15)\n\
@@ -82,8 +85,9 @@ void cleanup()
   }
 }
 
-void signal_handler()
+void signal_handler(int sig)
 {
+  (void)sig;          // silence unused parameter warning
   exit(EXIT_SUCCESS);
 }
 
@@ -124,7 +128,8 @@ int main(int argc, char *argv[])
     .msgcmd = "",
     .appname = PROGNAME,
     .icon = NULL,
-    .notification_expires = NOTIFY_EXPIRES_NEVER
+    .notification_expires = NOTIFY_EXPIRES_NEVER,
+    .enable_sound = false
   };
 
   sigemptyset(&sigs);
@@ -140,6 +145,7 @@ int main(int argc, char *argv[])
     parse_args(conf_argc, conf_argv, &config);
   }
   parse_args(argc, argv, &config);
+  enable_sound = config.enable_sound;
 
   if (config.help) {
     print_help();

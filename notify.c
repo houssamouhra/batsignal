@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include "battery.h"
 #include "notify.h"
+#include "sound.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 static NotifyNotification *notification = NULL;
 static char *notification_icon = NULL;
@@ -50,6 +54,27 @@ void notify(char *msg, NotifyUrgency urgency, BatteryState battery)
     notify_notification_update(notification, msg, body, notification_icon);
     notify_notification_set_urgency(notification, urgency);
     notify_notification_show(notification, NULL);
+  }
+
+  /* Play the embedded sound if enabled */
+  extern bool enable_sound;
+  if (enable_sound) {
+    char path[] = "/tmp/batsignal-XXXXXX.mp3";
+    int fd = mkstemps(path, 4);
+    if (fd >= 0) {
+      write(fd, battery_mp3, battery_mp3_len);
+      close(fd);
+
+      char cmd[256];
+      snprintf(cmd, sizeof(cmd),
+               "paplay '%s' 2>/dev/null || "
+               "mpg123 -q '%s' 2>/dev/null || "
+               "ffplay -nodisp -autoexit -loglevel quiet '%s' 2>/dev/null",
+               path, path, path);
+      system(cmd);
+
+      unlink(path);
+    }
   }
 }
 
