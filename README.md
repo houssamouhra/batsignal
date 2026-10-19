@@ -15,6 +15,9 @@ warning level.
 
 By default, batsignal will attempt to detect the correct battery to monitor.
 
+Optional built-in notification sound (enabled with `-s`). The sound is embedded
+directly into the binary, so no external file is required.
+
 Requirements
 ------------
 Batsignal requires the following software to build:
@@ -23,6 +26,12 @@ Batsignal requires the following software to build:
   * libnotify
   * make
   * pkg-config
+
+To play the built-in sound, at least one of the following is needed at runtime:
+
+  * paplay (from libpulse)
+  * mpg123
+  * ffplay
 
 Installation
 ------------
@@ -35,10 +44,14 @@ Usage
 -----
 See `man batsignal` for details.
 
+Example with sound enabled:
+
+    $ batsignal -w 20 -c 10 -d 5 -e -s -b
+
 Configuration
 -------------
 `batsignal` is configured using command options - see `man batsignal` for a
-complete list. these options can be passed manually from the terminal, added
+complete list. These options can be passed manually from the terminal, added
 to the command invocation in shell profile scripts, or during window manager
 initialization.
 
@@ -58,12 +71,14 @@ options used by the service, create a drop-in file that overrides `ExecStart`.
 For example:
 
     $ mkdir -p ~/.config/systemd/user/batsignal.service.d
-    $ printf '[Service]\nExecStart=\nExecStart=batsignal -c 10 -w 30 -f 97' > ~/.config/systemd/user/batsignal.service.d/options.conf
+    $ printf '[Service]\nExecStart=\nExecStart=batsignal -c 10 -w 30 -f 97 -s' > ~/.config/systemd/user/batsignal.service.d/options.conf
 
 Authors
 -------
 batsignal is written by Corey Hinshaw. It was originally forked from juiced by
 Aaron Marcher.
+
+This fork adds optional built-in notification sound support.
 
 License and Copyright
 ---------------------
