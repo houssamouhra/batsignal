@@ -53,6 +53,9 @@ typedef struct Config {
 
   /* specify when the notification should expire */
   int notification_expires;
+
+  /* play built-in sound on notifications */
+  bool enable_sound;
 } Config;
 
 char* find_config_file();

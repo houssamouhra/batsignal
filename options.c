@@ -143,7 +143,7 @@ void parse_args(int argc, char *argv[], Config *config)
   signed int c;
   optind = 1;
 
-  while ((c = getopt(argc, argv, ":hvboiew:c:d:f:pW:C:D:F:P:U:M:Nn:m:a:I:")) != -1) {
+  while ((c = getopt(argc, argv, ":hvboiew:c:d:f:pW:C:D:F:P:U:M:Nn:m:a:I:s")) != -1) {
     switch (c) {
       case 'h':
         config->help = true;
@@ -168,6 +168,9 @@ void parse_args(int argc, char *argv[], Config *config)
         break;
       case 'd':
         config->danger = strtoul(optarg, NULL, 10);
+        break;
+      case 's':
+        config->enable_sound = true;
         break;
       case 'f':
         config->full = strtoul(optarg, NULL, 10);
