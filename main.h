@@ -5,7 +5,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define VERSION "1.8.0"
+#define VERSION "1.8.1"
 #define PROGNAME "batsignal"
 #define PROGUPPER "BATSIGNAL"
 
